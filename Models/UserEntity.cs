@@ -15,4 +15,6 @@
     public List<CardEntity> Cards { get; set; } = [];
 
     public TransactionEntity? Transaction { get; set; }
+
+    public List<TransactionEntity> Transactions { get; set; } = [];
 }

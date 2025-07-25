@@ -1,10 +1,4 @@
-public enum TransactionType
-{
-    Депозит = 1,
-    СнятиеСредств = 2,
-    Перевод = 3,
-    ДебетоваяОперация = 4
-}
+
 
 public enum TransactionStatus
 {
@@ -12,6 +6,13 @@ public enum TransactionStatus
     Ошибка = 2,
     Выполняется = 3,
     Отменена = 4
+}
+public enum TransactionType
+{
+    Депозит = 1,
+    СнятиеСредств = 2,
+    Перевод = 3,
+    ДебетоваяОперация = 4
 }
 
 public class TransactionEntity : BaseEntity
@@ -22,14 +23,15 @@ public class TransactionEntity : BaseEntity
 
     public string Description { get; set; } = string.Empty;
 
-    public Guid FromUser { get; set; }
-    public Guid ToUser { get; set; }
+    public Guid SenderId { get; set; }
+    public required UserEntity Sender { get; set; }
+    public Guid RecipientId { get; set; }
+    public required UserEntity Recipient { get; set; }
 
-    public UserEntity? User { get; set; }
+    public Guid FromCardId { get; set; }
 
-    public Guid FromCard { get; set; }
-    public Guid ToCard { get; set; }
-
+    public Guid ToCardId { get; set; }
+    
     public CardEntity? Card { get; set; }
 
     public TransactionType TrType { get; set; }

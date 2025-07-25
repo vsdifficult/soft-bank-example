@@ -8,8 +8,8 @@ public class TransactionConfiguration : IEntityTypeConfiguration<TransactionEnti
         builder.HasKey(t => t.Id);
 
         builder.
-            HasOne(t => t.User)
-            .WithOne(u => u.Transaction);
+            HasOne(t => t.Sender)
+            .WithOne(s => s.Transaction);
 
         builder.
             HasOne(t => t.Card)
