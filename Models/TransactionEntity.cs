@@ -27,14 +27,10 @@ public class TransactionEntity : BaseEntity
 
     public UserEntity? User { get; set; }
 
-    public List<UserEntity> Users { get; set; } = [];
-
     public Guid FromCard { get; set; }
     public Guid ToCard { get; set; }
 
     public CardEntity? Card { get; set; }
-
-    public List<CardEntity> Cards { get; set; } = [];
 
     public TransactionType TrType { get; set; }
     public TransactionStatus TrStatus { get; set; }

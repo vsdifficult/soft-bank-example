@@ -10,4 +10,6 @@ public class CardEntity : BaseEntity
 
     public UserEntity? User { get; set; }
     public Guid UserId { get; set; }
+
+    public TransactionEntity? Transaction { get; set; }
 }

@@ -10,5 +10,9 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
         builder.
             HasMany(u => u.Cards)
             .WithOne(c => c.User);
+
+        builder.
+            HasOne(u => u.Transaction)
+            .WithOne(t => t.User);
     }
 }
