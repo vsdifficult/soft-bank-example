@@ -14,5 +14,9 @@ public class TransactionConfiguration : IEntityTypeConfiguration<TransactionEnti
         builder.
             HasOne(t => t.Card)
             .WithOne(c => c.Transaction);
+
+        builder.HasOne(t => t.Recipient)
+            .WithMany()
+            .HasForeignKey(t => t.RecipientId);
     }
 }
