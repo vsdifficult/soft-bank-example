@@ -25,7 +25,7 @@ public class TransactionEntity : BaseEntity
 
     public Guid SenderId { get; set; }
     public required UserEntity Sender { get; set; }
-    public Guid RecipientId { get; set; }
+    public Guid? RecipientId { get; set; }
     public required UserEntity Recipient { get; set; }
 
     public Guid FromCardId { get; set; }
