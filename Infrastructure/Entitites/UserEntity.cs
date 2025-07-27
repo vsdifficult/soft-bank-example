@@ -1,4 +1,5 @@
-﻿public class UserEntity : BaseEntity
+﻿namespace SoftBank.Infrastructure.Entitites;
+public class UserEntity : BaseEntity
 {
     public string FirstName { get; set; } = string.Empty;
 
@@ -14,7 +15,7 @@
 
     public List<CardEntity> Cards { get; set; } = [];
 
-    public TransactionEntity? Transaction { get; set; }
+    // public TransactionEntity? Transaction { get; set; }
 
     public List<TransactionEntity> Transactions { get; set; } = [];
 }
