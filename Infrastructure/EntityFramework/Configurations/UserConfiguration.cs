@@ -1,24 +1,24 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SoftBank.Infrastructure.Entities;
+namespace SofBank.Infrastructure.EntityFramework.Repositories;
 
 public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
 {
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
         builder.HasKey(u => u.Id);
-        builder.HasKey(s => s.Id);
-        builder.HasKey(r => r.Id);
 
         builder.
-            HasMany(u => u.Cards)
-            .WithOne(c => c.User);
+          HasMany(u => u.Cards)
+         .WithOne(c => c.User);
 
         builder.
-            HasOne(s => s.Transaction)
-            .WithOne(t => t.Sender);
+         HasOne(s => s.Transactions)
+         .WithOne(t => t.Sender);
 
         builder.
-            HasOne(r => r.Transaction)
-            .WithOne(t => t.Recipient);
+          HasOne(r => r.Transactions)
+         .WithOne(t => t.Recipient);
     }
 }
