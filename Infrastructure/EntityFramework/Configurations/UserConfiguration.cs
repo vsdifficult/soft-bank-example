@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SoftBank.Infrastructure.Entities;
+
 namespace SofBank.Infrastructure.EntityFramework.Repositories;
 
 public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
@@ -9,16 +10,14 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
     {
         builder.HasKey(u => u.Id);
 
-        builder.
-          HasMany(u => u.Cards)
-         .WithOne(c => c.User);
+        builder.HasMany(u => u.Cards)
+               .WithOne(c => c.User);
 
-        builder.
-         HasOne(s => s.Transactions)
-         .WithOne(t => t.Sender);
+        builder.HasMany(u => u.SentTransactions)
+               .WithOne(t => t.Sender); // Указываем, что TransactionEntity имеет свойство Sender
 
-        builder.
-          HasOne(r => r.Transactions)
-         .WithOne(t => t.Recipient);
+        // Связь с полученными транзакциями
+        builder.HasMany(u => u.ReceivedTransactions)
+               .WithOne(t => t.Recipient); // Указываем, что TransactionEntity имеет свойство Recipient
     }
 }
