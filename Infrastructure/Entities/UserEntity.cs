@@ -1,4 +1,5 @@
 ﻿namespace SoftBank.Infrastructure.Entities;
+
 public class UserEntity : BaseEntity
 {
     public string FirstName { get; set; } = string.Empty;
@@ -18,4 +19,9 @@ public class UserEntity : BaseEntity
     // public TransactionEntity? Transaction { get; set; }
 
     public List<TransactionEntity> Transactions { get; set; } = [];
+
+    public List<TransactionEntity> SentTransactions { get; set; } = [];
+
+
+    public List<TransactionEntity> ReceivedTransactions { get; set; } = [];
 }

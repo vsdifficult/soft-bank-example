@@ -1,6 +1,7 @@
 using SoftBank.Shared.Model;
 
 namespace SoftBank.Infrastructure.Entities;
+
 public class TransactionEntity : BaseEntity
 {
     public DateTime CommitmentTransaction { get; set; }
@@ -10,10 +11,10 @@ public class TransactionEntity : BaseEntity
     public string Description { get; set; } = string.Empty;
 
     public Guid? SenderId { get; set; }
-    // public required UserEntity Sender { get; set; }
-    public Guid? RecipientId { get; set; }
-    // public required UserEntity Recipient { get; set; }
+    public UserEntity? Sender { get; set; }
 
+    public Guid? RecipientId { get; set; }
+    public UserEntity? Recipient { get; set; }
     public Guid FromCardId { get; set; }
 
     public Guid ToCardId { get; set; }
@@ -22,4 +23,5 @@ public class TransactionEntity : BaseEntity
 
     public TransactionType TrType { get; set; }
     public TransactionStatus TrStatus { get; set; }
+    
 }
