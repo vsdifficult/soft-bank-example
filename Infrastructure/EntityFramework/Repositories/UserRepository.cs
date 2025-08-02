@@ -1,57 +1,44 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SoftBank.Core.Repositories;
 
-namespaсe SoftBank.Infrastructure.EntityFramework.Repositories
+public class UserRepository<T, TKey> where T : class
 {
-    public class UserRepository<T, TKey> where T : class
+    public async Task<IEnumerable<T>> GetAllAsync(DbSet<T> dbSet)
     {
-        private readonly DbContext _context;
-        private readonly DbSet<T> _dbSet;
+        return await dbSet.ToListAsync();
+    }
 
-        public UserRepository(DbContext context)
-        {
-            _context = context;
-            _dbSet = context.Set<T>();
-        }
+    public async Task<T?> GetByIdAsync(DbSet<T> dbSet, TKey id)
+    {
+        return await dbSet.FindAsync(id);
+    }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
+    public async Task<TKey> CreateAsync(DbContext context, DbSet<T> dbSet, T entity)
+    {
+        await dbSet.AddAsync(entity);
+        await context.SaveChangesAsync();
 
-        public async Task<T?> GetByIdAsync(TKey id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
+        var property = typeof(T).GetProperty("Id");
+        if (property == null)
+            throw new InvalidOperationException("Entity has no Id property");
 
-        public async Task<TKey> CreateAsync(T entity)
-        {
-            await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+        return (TKey)property.GetValue(entity)!;
+    }
 
-            var property = typeof(T).GetProperty("Id");
-            if (property == null)
-                throw new InvalidOperationException("Сущность не содержит свойство Id");
+    public async Task<bool> UpdateAsync(DbContext context, DbSet<T> dbSet, T entity)
+    {
+        dbSet.Update(entity);
+        return await context.SaveChangesAsync() > 0;
+    }
 
-            return (TKey)property.GetValue(entity)!;
-        }
+    public async Task<bool> DeleteAsync(DbContext context, DbSet<T> dbSet, TKey id)
+    {
+        var entity = await dbSet.FindAsync(id);
+        if (entity == null)
+            return false;
 
-        public async Task<bool> UpdateAsync(T entity)
-        {
-            _dbSet.Update(entity);
-            return await _context.SaveChangesAsync() > 0;
-        }
-
-        public async Task<bool> DeleteAsync(TKey id)
-        {
-            var entity = await GetByIdAsync(id);
-            if (entity == null)
-                return false;
-
-            _dbSet.Remove(entity);
-            return await _context.SaveChangesAsync() > 0;
-        }
-}
+        dbSet.Remove(entity);
+        return await context.SaveChangesAsync() > 0;
+    }
 }
