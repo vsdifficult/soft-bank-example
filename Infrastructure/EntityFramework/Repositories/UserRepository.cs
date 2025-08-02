@@ -1,44 +1,108 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SoftBank.Core.Repositories;
+using SoftBank.Infrastructure.EntityFramework;
+using SoftBank.Infrastructure.Entities;
+using SoftBank.Shared.Dto;
+using SoftBank.Shared.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class UserRepository<T, TKey> where T : class
+namespace SoftBank.Infrastructure.EntityFramework.Repositories
 {
-    public async Task<IEnumerable<T>> GetAllAsync(DbSet<T> dbSet)
+    public class UserRepository : IUserRepository
     {
-        return await dbSet.ToListAsync();
-    }
+        private readonly SoftBankDbContext _context;
 
-    public async Task<T?> GetByIdAsync(DbSet<T> dbSet, TKey id)
-    {
-        return await dbSet.FindAsync(id);
-    }
+        public UserRepository(SoftBankDbContext context)
+        {
+            _context = context;
+        }
 
-    public async Task<TKey> CreateAsync(DbContext context, DbSet<T> dbSet, T entity)
-    {
-        await dbSet.AddAsync(entity);
-        await context.SaveChangesAsync();
+        // Получить всех пользователей
+        public async Task<IEnumerable<UserDto>> GetAllAsync()
+        {
+            var users = await _context.Users.ToListAsync();
+            return users.Select(MapToDto);
+        }
 
-        var property = typeof(T).GetProperty("Id");
-        if (property == null)
-            throw new InvalidOperationException("Entity has no Id property");
+        // Получить пользователя по Id
+        public async Task<UserDto?> GetByIdAsync(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            return user == null ? null : MapToDto(user);
+        }
 
-        return (TKey)property.GetValue(entity)!;
-    }
+        // Создать нового пользователя
+        public async Task<Guid> CreateAsync(UserDto user)
+        {
+            var userEntity = MapToEntity(user);
+            userEntity.Id = Guid.NewGuid(); // сгенерировать новый Id
 
-    public async Task<bool> UpdateAsync(DbContext context, DbSet<T> dbSet, T entity)
-    {
-        dbSet.Update(entity);
-        return await context.SaveChangesAsync() > 0;
-    }
+            await _context.Users.AddAsync(userEntity);
+            await _context.SaveChangesAsync();
 
-    public async Task<bool> DeleteAsync(DbContext context, DbSet<T> dbSet, TKey id)
-    {
-        var entity = await dbSet.FindAsync(id);
-        if (entity == null)
-            return false;
+            return userEntity.Id;
+        }
 
-        dbSet.Remove(entity);
-        return await context.SaveChangesAsync() > 0;
+        // Обновить пользователя
+        public async Task<bool> UpdateAsync(UserDto user)
+        {
+            var existingUser = await _context.Users.FindAsync(user.Id);
+            if (existingUser == null)
+                return false;
+
+            // Обновить поля
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.Email = user.Email;
+            existingUser.Login = user.Login;
+            existingUser.Password = user.Password;
+
+            _context.Users.Update(existingUser);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // Удалить пользователя
+        public async Task<bool> DeleteAsync(Guid userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return false;
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // Вспомогательный метод: преобразовать UserEntity в UserDto
+        private UserDto MapToDto(UserEntity user)
+        {
+            return new UserDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Login = user.Login,
+                Password = user.Password // В реальном приложении пароль хранят хэшированным и сюда не возвращают
+            };
+        }
+
+        // Вспомогательный метод: преобразовать UserDto в UserEntity
+        private UserEntity MapToEntity(UserDto user)
+        {
+            return new UserEntity
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Login = user.Login,
+                Password = user.Password
+            };
+        }
     }
 }
