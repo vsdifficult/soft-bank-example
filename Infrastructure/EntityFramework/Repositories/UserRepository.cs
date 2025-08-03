@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace SoftBank.Infrastructure.EntityFramework.Repositories
 {
+    // Репозиторий для пользователя
     public class UserRepository : IUserRepository
     {
         private readonly SoftBankDbContext _context;
