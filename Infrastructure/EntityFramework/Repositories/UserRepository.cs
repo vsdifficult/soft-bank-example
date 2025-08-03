@@ -27,7 +27,7 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
             return users.Select(MapToDto);
         }
 
-        // Получить пользователя по Id
+        // Получить пользователя по ID
         public async Task<UserDto?> GetByIdAsync(Guid userId)
         {
             var user = await _context.Users.FindAsync(userId);
@@ -106,4 +106,3 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
         }
     }
 }
-
