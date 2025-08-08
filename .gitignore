@@ -131,4 +131,8 @@ PackageAssociation.xml
 _pkginfo.txt
 
 # Visual Studio cache files
+<<<<<<< HEAD
 *.cache
+=======
+*.cache
+>>>>>>> ffd8a5c1a5f383a6744c72f7c46bc3b739170361
