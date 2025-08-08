@@ -3,15 +3,22 @@ namespace SoftBank.Shared.Model;
 
 public enum TransactionStatus
 {
-    Завершена = 1,
-    Ошибка = 2,
-    Выполняется = 3,
-    Отменена = 4
+    Завершена,
+    Ошибка,
+    Выполняется,
+    Отменена
 }
 public enum TransactionType
 {
-    Депозит = 1,
-    СнятиеСредств = 2,
-    Перевод = 3,
-    ДебетоваяОперация = 4
+    Депозит,
+    СнятиеСредств,
+    Перевод,
+    ДебетоваяОперация
+}
+
+public enum UserRole
+{
+    Admin,
+    User
+
 }

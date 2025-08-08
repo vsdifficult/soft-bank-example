@@ -193,6 +193,19 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
+      "Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Shared": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Core.dll": {}
+        }
+      },
       "Shared/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -541,6 +554,11 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Core/1.0.0": {
+      "type": "project",
+      "path": "../Core/Core.csproj",
+      "msbuildProject": "../Core/Core.csproj"
+    },
     "Shared/1.0.0": {
       "type": "project",
       "path": "../Shared/Shared.csproj",
@@ -549,37 +567,49 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "Core >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 9.0.7",
       "Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "/home/ilyali/.nuget/packages/": {}
+    "C:\\Users\\A1RA\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/ilyali/Documents/soft-bank-example/Infrastructure/Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\A1RA\\Desktop\\csdev\\soft-bank-example\\Infrastructure\\Infrastructure.csproj",
       "projectName": "Infrastructure",
-      "projectPath": "/home/ilyali/Documents/soft-bank-example/Infrastructure/Infrastructure.csproj",
-      "packagesPath": "/home/ilyali/.nuget/packages/",
-      "outputPath": "/home/ilyali/Documents/soft-bank-example/Infrastructure/obj/",
+      "projectPath": "C:\\Users\\A1RA\\Desktop\\csdev\\soft-bank-example\\Infrastructure\\Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\A1RA\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\A1RA\\Desktop\\csdev\\soft-bank-example\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/ilyali/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\A1RA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/home/ilyali/Documents/soft-bank-example/Shared/Shared.csproj": {
-              "projectPath": "/home/ilyali/Documents/soft-bank-example/Shared/Shared.csproj"
+            "C:\\Users\\A1RA\\Desktop\\csdev\\soft-bank-example\\Core\\Core.csproj": {
+              "projectPath": "C:\\Users\\A1RA\\Desktop\\csdev\\soft-bank-example\\Core\\Core.csproj"
+            },
+            "C:\\Users\\A1RA\\Desktop\\csdev\\soft-bank-example\\Shared\\Shared.csproj": {
+              "projectPath": "C:\\Users\\A1RA\\Desktop\\csdev\\soft-bank-example\\Shared\\Shared.csproj"
             }
           }
         }
@@ -621,7 +651,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/ilyali/dotnet/sdk/9.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

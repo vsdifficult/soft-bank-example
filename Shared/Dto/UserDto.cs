@@ -1,5 +1,7 @@
 
+using SoftBank.Shared.Model; 
 namespace SoftBank.Shared.Dto;
+
 
 
 public class UserDto
@@ -17,8 +19,10 @@ public class UserDto
 
     public DateTime DateOfBirth { get; set; }
 
+    public UserRole UserRole { get; set; }
+    
     // public List<CardEntity> Cards { get; set; } = [];
-} 
+}
 
 // User DTO register 
 
@@ -27,3 +31,34 @@ public class UserDto
 
 
 // User DTO Update
+
+public record RegisterDto
+{
+    public string FirstName { get; init; } = string.Empty;
+
+    public string LastName { get; init; } = string.Empty;
+
+    public string Email { get; init; } = string.Empty;
+
+    public string Login { get; init; } = string.Empty;
+
+    public string Password { get; init; } = string.Empty;
+
+    public DateTime DateOfBirth { get; init; }
+
+    public UserRole UserRole { get; init; }
+}
+
+public record LoginDto
+{
+    public string Password { get; init; } = string.Empty;
+
+    public string Email { get; init; } = string.Empty;
+}
+
+public record VerificationDto
+{
+    public string Email { get; init; } = string.Empty;
+
+    public int Code { get; init; }
+}
