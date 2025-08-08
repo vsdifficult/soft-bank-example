@@ -1,7 +1,5 @@
-
 using SoftBank.Shared.Model; 
 namespace SoftBank.Shared.Dto;
-
 
 
 public class UserDto
@@ -20,6 +18,8 @@ public class UserDto
     public DateTime DateOfBirth { get; set; }
 
     public UserRole UserRole { get; set; }
+
+    public int Code { get; set; }
     
     // public List<CardEntity> Cards { get; set; } = [];
 }
