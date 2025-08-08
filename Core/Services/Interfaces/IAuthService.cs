@@ -22,4 +22,5 @@ public interface IAuthenticationService
     Task<AuthResult> SignInAsync(LoginDto dto);
     Task<AuthResult> VerificationAsync(VerificationDto dto);
     Task<AuthResult> DeleteAsync(Guid userid);
+    
 }
