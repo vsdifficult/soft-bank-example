@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SoftBank.Core.Repositories;
 using SoftBank.Infrastructure.EntityFramework;
-<<<<<<< HEAD
 using SoftBank.Infrastructure.Entities;
 using SoftBank.Shared.Dto;
 using SoftBank.Shared.Model;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SoftBank.Infrastructure.EntityFramework.Repositories
 {
-    // Репозиторий для пользователя
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public class UserRepository : IUserRepository
     {
         private readonly SoftBankDbContext _context;
@@ -22,25 +21,30 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
             _context = context;
         }
 
-        // Получить всех пользователей
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
             var users = await _context.Users.ToListAsync();
             return users.Select(MapToDto);
         }
 
-        // Получить пользователя по ID
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ ID
         public async Task<UserDto?> GetByIdAsync(Guid userId)
         {
             var user = await _context.Users.FindAsync(userId);
             return user == null ? null : MapToDto(user);
         }
 
-        // Создать нового пользователя
+        public async Task<UserDto> GetByEmailAsync(string email)
+        {
+            return await _context.Users.Where(u => u.Email==email).Select(u => new UserDto{Id = u.Id, FirstName = u.FirstName, LastName = u.LastName, Email = u.Email, Login = u.Login, Password = u.Password, DateOfBirth = u.DateOfBirth, UserRole = u.UserRole, Code = u.Code}).FirstOfDefaultAsync()
+        }
+
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         public async Task<Guid> CreateAsync(UserDto user)
         {
             var userEntity = MapToEntity(user);
-            userEntity.Id = Guid.NewGuid(); // сгенерировать новый Id
+            userEntity.Id = Guid.NewGuid(); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Id
 
             await _context.Users.AddAsync(userEntity);
             await _context.SaveChangesAsync();
@@ -48,14 +52,14 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
             return userEntity.Id;
         }
 
-        // Обновить пользователя
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         public async Task<bool> UpdateAsync(UserDto user)
         {
             var existingUser = await _context.Users.FindAsync(user.Id);
             if (existingUser == null)
                 return false;
 
-            // Обновить поля
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
             existingUser.FirstName = user.FirstName;
             existingUser.LastName = user.LastName;
             existingUser.Email = user.Email;
@@ -67,7 +71,7 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
             return true;
         }
 
-        // Удалить пользователя
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         public async Task<bool> DeleteAsync(Guid userId)
         {
             var user = await _context.Users.FindAsync(userId);
@@ -79,7 +83,7 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
             return true;
         }
 
-        // Вспомогательный метод: преобразовать UserEntity в UserDto
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ UserEntity пїЅ UserDto
         private UserDto MapToDto(UserEntity user)
         {
             return new UserDto
@@ -89,11 +93,11 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
                 LastName = user.LastName,
                 Email = user.Email,
                 Login = user.Login,
-                Password = user.Password // В реальном приложении пароль хранят хэшированным и сюда не возвращают
+                Password = user.Password // пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             };
         }
 
-        // Вспомогательный метод: преобразовать UserDto в UserEntity
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ UserDto пїЅ UserEntity
         private UserEntity MapToEntity(UserDto user)
         {
             return new UserEntity
@@ -108,55 +112,3 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
         }
     }
 }
-=======
-using SoftBank.Infrastructure.Entities; 
-using SoftBank.Shared.Dto;
-using SoftBank.Shared.Model;
-namespace SoftBank.Infrastructure.EntityFramework.Repositories;
-
-public class UserRepository : IUserRepository
-{
-    private readonly SoftBankDbContext _context;
-    public UserRepository(SoftBankDbContext context)
-    {
-        _context = context;
-    }
-
-    public async Task<UserDto> GetByIdAsync(Guid userId)
-    {
-        var user = await _context.Users.FindAsync(userId);
-        return user == null ? null : MapToDto(user);
-    }
-
-    public async Task<Guid> CreateAsync(UserDto user)
-    {
-        var user_ = new UserDto
-        {
-            Id = Guid.NewGuid(),
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Login = user.Login,
-            Password = user.Password
-        };
-
-        await _context.Users.AddAsync(MapToEntity(user_));
-        await _context.SaveChangesAsync();
-        return user_.Id;
-    }
-    private UserEntity MapToEntity(UserDto user)
-    {
-        return new UserEntity
-        {
-            
-        };
-    }
-    private UserDto MapToDto(UserEntity user)
-    {
-        return new UserDto
-        {
-
-        }; 
-    } 
-}
->>>>>>> ffd8a5c1a5f383a6744c72f7c46bc3b739170361
