@@ -1,7 +1,12 @@
 using SoftBank.Core.Services.Interfaces;
 using SoftBank.Core.Repositories;
 using SoftBank.Shared.Dto;
-
+using SoftBank.Shared.Model;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace SoftBank.Infrastructure.Auth;
 public class AuthenticationService : IAuthenticationService
@@ -17,7 +22,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task<AuthResult> SignUpAsync(RegisterDto dto)
     {
         // �������� ���� �� user � ��
-        var user = await _userRepository.FindByIdAsync(dto.Id);
+        var user = await _userRepository.GetByEmailAsync(dto.Email);
         if (user != null)
         {
             return new AuthResult {  Success = false, ErrorMessage = "������������ � ����� Id ��� ����."};
@@ -27,7 +32,7 @@ public class AuthenticationService : IAuthenticationService
         var verifyCode = new Random().Next(1000, 9999);
 
         // �������� ��� ��� �����������
-        var user = new UserDto { 
+        var user1 = new UserDto { 
             Id = Guid.NewGuid(),
             FirstName = dto.FirstName, 
             LastName = dto.LastName, 
@@ -35,7 +40,7 @@ public class AuthenticationService : IAuthenticationService
             Login = dto.Login,
             Password = dto.Password,
             DateOfBirth = dto.DateOfBirth,
-            UserRole = dto.Role,
+            UserRole = dto.UserRole,
             Code = verifyCode
         }; 
 
@@ -43,7 +48,7 @@ public class AuthenticationService : IAuthenticationService
 
 
         // �������� Entity
-        await _userRepository.CreateAsync(user);
+        await _userRepository.CreateAsync(user1);
 
         // �������� ������
         // var token = await GenerateTokenAsync(user.Id, user.Role);
@@ -60,14 +65,14 @@ public class AuthenticationService : IAuthenticationService
     public async Task<AuthResult> DeleteAsync(Guid userId)
     {
         // �������� ���� �� user � ��
-        var user = await _userRepository.FindByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(userId);
         if (user == null)
         {
             return new AuthResult { Success = false, ErrorMessage = "������������ � ����� Id �� ������." };
         }
 
         // �������� user
-        await _userRepository.DeleteAsync(user);
+        await _userRepository.DeleteAsync(user.Id);
 
         // ������� ����������
         return new AuthResult
@@ -106,14 +111,14 @@ public class AuthenticationService : IAuthenticationService
     
     public async Task<AuthResult> SignInAsync(LoginDto dto)
     {
-        var user = await _userRepository.FindByEmailAsync(dto.Email);
+        var user = await _userRepository.GetByEmailAsync(dto.Email);
         if (user == null)
         {
             return new AuthResult { Success = false, ErrorMessage = "User not found." };
         }
         else if(user.Password == dto.Password)
         {
-            var token = await GenerateTokenAsync(user.Id, user.Role);
+            var token = await GenerateTokenAsync(user.Id, user.UserRole);
             return new AuthResult{Success = true};
         }
 
@@ -122,7 +127,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<AuthResult> VerificationAsync(VerificationDto dto)
     {
-        var user = await _userRepository.FindByEmailAsync(dto.Email);
+        var user = await _userRepository.GetByEmailAsync(dto.Email);
         if (user == null)
         {
             return new AuthResult {Success = false, ErrorMessage = "User not found."};
@@ -130,7 +135,8 @@ public class AuthenticationService : IAuthenticationService
         
         if (dto.Code == user.Code)
         {
-            return new AuthResult{Success = true, UserId = user.Id, Token = token, Role = user.UserRole};
+            var token = await GenerateTokenAsync(user.Id, user.UserRole);
+            return new AuthResult { Success = true, UserId = user.Id, Token = token, Role = user.UserRole };
         }
         else
         {

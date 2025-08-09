@@ -27,7 +27,19 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
             var users = await _context.Users.ToListAsync();
             return users.Select(MapToDto);
         }
+        public async Task<bool> UpdateUserBalance(Guid userId, decimal balance)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
 
+                return false;
+            var user_dto = MapToDto(user);
+            user_dto.Balance = balance;
+            var newB = MapToEntity(user_dto);
+            _context.Users.Update(newB);
+            await _context.SaveChangesAsync();
+            return true;
+        }
         // �������� ������������ �� ID
         public async Task<UserDto?> GetByIdAsync(Guid userId)
         {
@@ -37,7 +49,7 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
 
         public async Task<UserDto> GetByEmailAsync(string email)
         {
-            return await _context.Users.Where(u => u.Email==email).Select(u => new UserDto{Id = u.Id, FirstName = u.FirstName, LastName = u.LastName, Email = u.Email, Login = u.Login, Password = u.Password, DateOfBirth = u.DateOfBirth, UserRole = u.UserRole, Code = u.Code}).FirstOfDefaultAsync()
+            return await _context.Users.Where(u => u.Email==email).Select(u => new UserDto{Id = u.Id, FirstName = u.FirstName, LastName = u.LastName, Email = u.Email, Login = u.Login, Password = u.Password, DateOfBirth = u.DateOfBirth, UserRole = u.UserRole, Code = u.Code}).FirstOrDefaultAsync(); 
         }
 
         // ������� ������ ������������

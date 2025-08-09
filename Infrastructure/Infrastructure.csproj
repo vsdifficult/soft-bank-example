@@ -6,11 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.13.1" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
-<<<<<<< HEAD
-=======
     <ProjectReference Include="..\Core\Core.csproj" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
->>>>>>> ffd8a5c1a5f383a6744c72f7c46bc3b739170361
   </ItemGroup>
 </Project>

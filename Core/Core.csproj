@@ -4,13 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-<<<<<<< HEAD
   </PropertyGroup>
-=======
-  </PropertyGroup> 
-  <ItemGroup> 
+  <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup> 
->>>>>>> ffd8a5c1a5f383a6744c72f7c46bc3b739170361
-
+  </ItemGroup>
 </Project>

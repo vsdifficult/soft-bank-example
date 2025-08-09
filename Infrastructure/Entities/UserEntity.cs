@@ -1,4 +1,6 @@
-﻿namespace SoftBank.Infrastructure.Entities;
+﻿using SoftBank.Shared.Model;
+
+namespace SoftBank.Infrastructure.Entities;
 
 public class UserEntity : BaseEntity
 {
@@ -13,6 +15,10 @@ public class UserEntity : BaseEntity
     public string Password { get; set; } = string.Empty;
 
     public DateTime DateOfBirth { get; set; }
+    public UserRole UserRole { get; set; }
+    public int Code { get; set; }
+
+
 
     public List<CardEntity> Cards { get; set; } = [];
 

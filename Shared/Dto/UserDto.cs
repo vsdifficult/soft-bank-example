@@ -14,6 +14,7 @@ public class UserDto
     public string Login { get; set; } = string.Empty;
 
     public string Password { get; set; } = string.Empty;
+    public decimal Balance { get; set; }
 
     public DateTime DateOfBirth { get; set; }
 
