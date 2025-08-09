@@ -9,4 +9,5 @@ namespace SoftBank.Core.Repositories;
 public interface IUserRepository : IRepository<UserDto, Guid>
 {
     void UpdateUserBalance(Guid userId, decimal balance);
+    Task<UserDto> GetByEmailAsync (string email);
 }

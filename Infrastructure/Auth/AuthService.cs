@@ -13,20 +13,20 @@ public class AuthenticationService : IAuthenticationService
         _userRepository = userRepository;
     }
 
-    // Функция регистрации пользователя
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public async Task<AuthResult> SignUpAsync(RegisterDto dto)
     {
-        // Проверка есть ли user в БД
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ user пїЅ пїЅпїЅ
         var user = await _userRepository.FindByIdAsync(dto.Id);
         if (user != null)
         {
-            return new AuthResult {  Success = false, ErrorMessage = "Пользователь с таким Id уже есть."};
+            return new AuthResult {  Success = false, ErrorMessage = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ Id пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ."};
         }
 
-        // Код для верификации
+        // пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         var verifyCode = new Random().Next(1000, 9999);
 
-        // Создание Дто для репозитория
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         var user = new UserDto { 
             Id = Guid.NewGuid(),
             FirstName = dto.FirstName, 
@@ -39,46 +39,46 @@ public class AuthenticationService : IAuthenticationService
             Code = verifyCode
         }; 
 
-        // Отправка кода на почту
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
 
-        // Создание Entity
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Entity
         await _userRepository.CreateAsync(user);
 
-        // Создание токена
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         // var token = await GenerateTokenAsync(user.Id, user.Role);
 
-        // Возврат результата
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         return new AuthResult
         {
             Success = true,
-            Message = "Регистрация прошла успешно."
+            Message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ."
         };
     }
 
-    // Функция удаления пользователя
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public async Task<AuthResult> DeleteAsync(Guid userId)
     {
-        // Проверка есть ли user в БД
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ user пїЅ пїЅпїЅ
         var user = await _userRepository.FindByIdAsync(userId);
         if (user == null)
         {
-            return new AuthResult { Success = false, ErrorMessage = "Пользователь с таким Id не найден." };
+            return new AuthResult { Success = false, ErrorMessage = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ Id пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ." };
         }
 
-        // Удаление user
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ user
         await _userRepository.DeleteAsync(user);
 
-        // Возврат результата
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         return new AuthResult
         {
             Success = true,
-            Message = "Удаление прошло успешно."
+            Message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ."
         };
     }
 
 
-    // -------- Доп. функции -------
+    // -------- пїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ -------
 
     private async Task<string> GenerateTokenAsync(Guid userId, UserRole role)
     {
@@ -103,6 +103,39 @@ public class AuthenticationService : IAuthenticationService
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
+    
+    public async Task<AuthResult> SignInAsync(LoginDto dto)
+    {
+        var user = await _userRepository.FindByEmailAsync(dto.Email);
+        if (user == null)
+        {
+            return new AuthResult { Success = false, ErrorMessage = "User not found." };
+        }
+        else if(user.Password == dto.Password)
+        {
+            var token = await GenerateTokenAsync(user.Id, user.Role);
+            return new AuthResult{Success = true};
+        }
 
+        return new AuthResult { Success = false, ErrorMessage = "Login error." };
+    }
+
+    public async Task<AuthResult> VerificationAsync(VerificationDto dto)
+    {
+        var user = await _userRepository.FindByEmailAsync(dto.Email);
+        if (user == null)
+        {
+            return new AuthResult {Success = false, ErrorMessage = "User not found."};
+        }
+        
+        if (dto.Code == user.Code)
+        {
+            return new AuthResult{Success = true, UserId = user.Id, Token = token, Role = user.UserRole};
+        }
+        else
+        {
+            return new AuthResult { Success = false, ErrorMessage = "Incorrect code." };
+        }
+    }
 }
 
