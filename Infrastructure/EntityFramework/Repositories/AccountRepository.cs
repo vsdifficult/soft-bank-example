@@ -31,6 +31,28 @@ public class UserRepository : IUserRepository
         return account == null ? null : MapToDto(account);
     }
 
+    public async Task<Guid> CreateAsync(AccountDto account)
+    {
+        var accountEntity = MapToEntity(account);
+        accountEntity.Id = Guid.NewGuid(); 
+
+        await _context.Accounts.AddAsync(accountEntity);
+        await _context.SaveChangesAsync();
+
+        return accountEntity.Id;
+    }
+
+    public async Task<bool> DeleteAsync(Guid accountId)
+    {
+        var account = await _context.Accounts.FindAsync(accountId);
+        if (account == null)
+            return false;
+
+        _context.Accounts.Remove(account);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
     private AccountDto MapToDto(AccountEntity account)
     {
         return new AccountDto
