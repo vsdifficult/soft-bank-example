@@ -18,16 +18,11 @@ public class UserEntity : BaseEntity
     public UserRole UserRole { get; set; }
     public int Code { get; set; }
 
-
-
     public List<CardEntity> Cards { get; set; } = [];
-
-    // public TransactionEntity? Transaction { get; set; }
 
     public List<TransactionEntity> Transactions { get; set; } = [];
 
-    public List<TransactionEntity> SentTransactions { get; set; } = [];
+    // public List<TransactionEntity> SentTransactions { get; set; } = [];
 
-
-    public List<TransactionEntity> ReceivedTransactions { get; set; } = [];
+    // public List<TransactionEntity> ReceivedTransactions { get; set; } = [];
 }
