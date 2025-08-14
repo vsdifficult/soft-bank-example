@@ -28,4 +28,17 @@ public class UserEndpoint : ControllerBase
         }
     } 
     
+    [HttpPost("verification")]
+    public async Task<IActionResult> EndpointVerifyAsync(VerificationDto dto)
+    {
+        try
+        {
+            var user = await _authenticationService.VerificationAsync(dto);
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    } 
 }

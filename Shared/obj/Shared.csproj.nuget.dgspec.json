@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/ilyali/Documents/soft-bank-example/Shared/Shared.csproj": {}
+    "C:\\Users\\Difficult\\Documents\\soft-bank-example\\Shared\\Shared.csproj": {}
   },
   "projects": {
-    "/home/ilyali/Documents/soft-bank-example/Shared/Shared.csproj": {
+    "C:\\Users\\Difficult\\Documents\\soft-bank-example\\Shared\\Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/ilyali/Documents/soft-bank-example/Shared/Shared.csproj",
+        "projectUniqueName": "C:\\Users\\Difficult\\Documents\\soft-bank-example\\Shared\\Shared.csproj",
         "projectName": "Shared",
-        "projectPath": "/home/ilyali/Documents/soft-bank-example/Shared/Shared.csproj",
-        "packagesPath": "/home/ilyali/.nuget/packages/",
-        "outputPath": "/home/ilyali/Documents/soft-bank-example/Shared/obj/",
+        "projectPath": "C:\\Users\\Difficult\\Documents\\soft-bank-example\\Shared\\Shared.csproj",
+        "packagesPath": "C:\\Users\\Difficult\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Difficult\\Documents\\soft-bank-example\\Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/ilyali/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Difficult\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -38,7 +38,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -59,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/home/ilyali/dotnet/sdk/9.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
