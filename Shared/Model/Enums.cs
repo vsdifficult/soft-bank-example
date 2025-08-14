@@ -22,3 +22,16 @@ public enum UserRole
     User
 
 }
+
+public enum Account
+{
+    Debet,
+    Cumulative,
+    Credit
+}
+
+public enum Currency
+{
+    Dollar,
+    Euro
+}
