@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace SoftBank.Infrastructure.EntityFramework.Repositories;
 
-public class UserRepository : IUserRepository
+public class AccountRepository : IAccountRepository
 {   
     private readonly SoftBankDbContext _context;
 
