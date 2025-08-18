@@ -38,10 +38,6 @@ public class TransactionAccount : BaseEntity
 
     public Guid? AccountNumberSender { get; set; }
 
-    public Guid? UserSender { get; set; }
-
-    public Guid? UserRecipient { get; set; }
-
     public TransactionType TrType { get; set; }
 
     public TransactionStatus TrStatus { get; set; }

@@ -4,6 +4,7 @@ namespace SoftBank.Core.Services.Interfaces;
 
 public interface IAccountBFFService
 {
-    Task ProcessPayment(PaymentDto payment);
-
+    Task<TransactionAccountDto> ProcessPayment(PaymentDto payment);
+    
+    Task<AccountStatisticsDto> GetStatistics(Guid accountId);
 }

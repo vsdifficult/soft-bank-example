@@ -15,3 +15,4 @@ public class CardConfiguration : IEntityTypeConfiguration<CardEntity>
         .HasForeignKey(c => c.UserId);
     }
 }
+// Bye Vlad =)

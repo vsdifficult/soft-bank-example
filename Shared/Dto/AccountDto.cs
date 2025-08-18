@@ -32,6 +32,8 @@ public record PaymentDto
 
 public record TransactionAccountDto
 {
+    public Guid Id { get; init; }
+
     public DateTime CommitmentTransaction { get; init; }
 
     public decimal Amount { get; init; }
@@ -42,13 +44,24 @@ public record TransactionAccountDto
 
     public Guid? AccountNumberSender { get; init; }
 
-    public Guid? UserSender { get; init; }
-
-    public Guid? UserRecipient { get; init; }
-
     public TransactionType TrType { get; init; }
 
     public TransactionStatus TrStatus { get; init; }
 
     public Currency CurrencyType { get; init; }
+}
+
+public record AccountStatisticsDto
+{
+    public Guid AccountId { get; init; }
+
+    public DateTime CreatedAt { get; init; }
+
+    public int TransationsQuantity { get; init; }
+
+    public decimal SpendAmount { get; init; }
+
+    public decimal EarnAmount { get; init; }
+
+    public List<TransactionAccountDto> TransactionsHistory { get; init; } = new List<TransactionAccountDto>();
 }
