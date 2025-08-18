@@ -25,3 +25,22 @@ public class TransactionEntity : BaseEntity
     public TransactionStatus TrStatus { get; set; }
     
 }
+
+public class TransactionAccount : BaseEntity
+{
+    public DateTime CommitmentTransaction { get; set; }
+
+    public decimal Amount { get; set; }
+
+    public string Description { get; set; } = string.Empty;
+
+    public Guid? AccountNumberRecipient { get; set; }
+
+    public Guid? AccountNumberSender { get; set; }
+
+    public TransactionType TrType { get; set; }
+
+    public TransactionStatus TrStatus { get; set; }
+
+    public Currency CurrencyType { get; set; }
+}

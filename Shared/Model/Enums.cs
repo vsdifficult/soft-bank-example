@@ -3,17 +3,17 @@ namespace SoftBank.Shared.Model;
 
 public enum TransactionStatus
 {
-    Завершена,
-    Ошибка,
-    Выполняется,
-    Отменена
+    Finished,
+    Error,
+    Pending,
+    Denied
 }
 public enum TransactionType
 {
-    Депозит,
-    СнятиеСредств,
-    Перевод,
-    ДебетоваяОперация
+    Deposite,
+    Withdrawal,
+    Transfer,
+    DebitOper
 }
 
 public enum UserRole
@@ -22,3 +22,17 @@ public enum UserRole
     User
 
 }
+
+public enum Account
+{
+    Debet,
+    Cumulative,
+    Credit
+}
+
+public enum Currency
+{
+    Dollar,
+    Euro
+}
+
