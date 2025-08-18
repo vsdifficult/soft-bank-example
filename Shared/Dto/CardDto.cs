@@ -6,6 +6,8 @@ public record CardDto
 
     public Guid UserId { get; init; }
 
+    public Guid AccountId { get; init; }
+
     public string CardNumber { get; init; }
 
     public string CardHolderName { get; init; }

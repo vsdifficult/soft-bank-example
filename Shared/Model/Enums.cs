@@ -36,3 +36,9 @@ public enum Currency
     Euro
 }
 
+public enum TransferType
+{
+    Card,
+    Account
+}
+

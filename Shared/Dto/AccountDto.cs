@@ -30,6 +30,24 @@ public record PaymentDto
     public Currency CurrencyType { get; init; }
 }
 
+public record TransferDto
+{
+    public Guid SenderId { get; init; }
+    public Guid RecipientId { get; init; }
+
+    public decimal Amount { get; init; }
+
+    public DateTime TransactionDate { get; init; }
+
+    public Currency CurrencyType { get; init; }
+
+    public string Description { get; init; }
+
+    public TransactionStatus TrStatus { get; init; }
+
+    public TransferType TransferType { get; init; }
+}
+
 public record TransactionAccountDto
 {
     public Guid Id { get; init; }

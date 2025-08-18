@@ -1,5 +1,6 @@
 
 namespace SoftBank.Infrastructure.Entities;
+
 public class CardEntity : BaseEntity
 {
     public string CardNumber { get; set; } = string.Empty;
@@ -12,7 +13,7 @@ public class CardEntity : BaseEntity
 
     public Guid UserId { get; set; }
 
-    public List<TransactionEntity> Transactions { get; set; } = new List<TransactionEntity>(); 
-
-    public UserEntity? User { get; set; }
+    public List<TransactionEntity> Transactions { get; set; } = new List<TransactionEntity>();
+    
+    public Guid AccountId { get; set; }
 }
