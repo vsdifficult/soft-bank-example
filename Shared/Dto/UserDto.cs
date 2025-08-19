@@ -25,6 +25,16 @@ public class UserDto
     // public List<CardEntity> Cards { get; set; } = [];
 }
 
+public record ClientStatisticsDto
+{
+    public Guid UserId { get; init; }
+
+    public AccountStatisticsDto AccountStatistics { get; init; }
+
+    public CardStatisticsDto CardStatistics { get; init; }
+}
+
+
 // User DTO register 
 
 

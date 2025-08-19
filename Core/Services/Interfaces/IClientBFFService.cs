@@ -6,5 +6,5 @@ public interface IClientService
 {
     Task<TransactionDto> TransactionTransferAsync(TransferDto transfer);
 
-    // Task<ClientStatisticsDto> GetStatistics(Guid clientId);
+    Task<ClientStatisticsDto> GetStatistics(Guid clientId);
 }
