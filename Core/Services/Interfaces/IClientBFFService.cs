@@ -5,4 +5,6 @@ namespace SoftBank.Core.Services.Interfaces;
 public interface IClientService
 {
     Task<TransactionDto> TransactionTransferAsync(TransferDto transfer);
+
+    // Task<ClientStatisticsDto> GetStatistics(Guid clientId);
 }

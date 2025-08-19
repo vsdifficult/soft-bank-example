@@ -2,8 +2,6 @@ namespace SoftBank.Infrastructure.Entities;
 
 public class AccountEntity : BaseEntity
 {
-    public Guid Id { get; set; }
-
     public Guid UserId { get; set; }
 
     public List<CardEntity> Cards { get; set; }

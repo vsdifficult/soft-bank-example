@@ -34,13 +34,15 @@ public class TransactionAccount : BaseEntity
 
     public string Description { get; set; } = string.Empty;
 
-    public Guid? AccountNumberRecipient { get; set; }
+    public Guid AccountNumberRecipient { get; set; }
 
-    public Guid? AccountNumberSender { get; set; }
+    public Guid AccountNumberSender { get; set; }
 
     public TransactionType TrType { get; set; }
 
     public TransactionStatus TrStatus { get; set; }
 
     public Currency CurrencyType { get; set; }
+
+    public Guid AccountId { get; set; }
 }

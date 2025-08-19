@@ -30,7 +30,7 @@ public class AccountRepository : IAccountRepository
         var account = await _context.Accounts.FindAsync(accountId);
         return account == null ? null : MapToDto(account);
     }
-
+    
     public async Task<Guid> CreateAsync(AccountDto account)
     {
         var accountEntity = MapToEntity(account);
@@ -53,6 +53,11 @@ public class AccountRepository : IAccountRepository
         return true;
     }
 
+    public async Task<List<TransactionAccountDto>> GetTransactions(Guid accountId) 
+    {
+        var account = await _context.Account
+    }
+
     private AccountDto MapToDto(AccountEntity account)
     {
         return new AccountDto
@@ -63,7 +68,8 @@ public class AccountRepository : IAccountRepository
             AccountType = account.AccountType,
             CurrencyType = account.CurrencyType,
             Amount = account.Amount,
-            CreatedAt = account.CreatedAt
+            CreatedAt = account.CreatedAt,
+            TransactionsAccountId = account.TransactionsAccountId
         };
     }
 
@@ -77,7 +83,8 @@ public class AccountRepository : IAccountRepository
             AccountType = account.AccountType,
             CurrencyType = account.CurrencyType,
             Amount = account.Amount,
-            CreatedAt = account.CreatedAt
+            CreatedAt = account.CreatedAt,
+            TransactionsAccountId = account.TransactionsAccountId
         };
     }
 }
