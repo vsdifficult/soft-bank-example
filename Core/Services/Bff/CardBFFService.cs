@@ -4,7 +4,9 @@ using SoftBank.Core.Services.Interfaces;
 
 namespace SoftBank.Core.Services.BFF;
 
-public class AccountBFFService : IAccountBFFService
+// Доделать: Сделать IRep и Rep для переводов карт + конфиги. Сделать CardDto 
+// Закончить CardBFFService 
+public class CardBFFService : ICardBFFService
 {
     private readonly ITransactionAccountsRepository _actransactionRepository;
 
@@ -48,7 +50,7 @@ public class AccountBFFService : IAccountBFFService
 
         accountSender.Amount -= payment.Amount;
         accountRecipient.Amount += payment.Amount;
-        
+
         await _actransactionRepository.CreateAsync(actransaction);
 
         return actransaction;
