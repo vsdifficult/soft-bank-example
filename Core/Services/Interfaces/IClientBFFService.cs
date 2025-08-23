@@ -2,7 +2,7 @@ using SoftBank.Shared.Dto;
 using SoftBank.Shared.Model;
 namespace SoftBank.Core.Services.Interfaces;
 
-public interface IClientService
+public interface IClientBFFService
 {
     Task<TransactionDto> TransactionTransferAsync(TransferDto transfer);
 }
