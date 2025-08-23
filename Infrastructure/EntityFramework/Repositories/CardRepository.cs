@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace SoftBank.Infrastructure.EntityFramework.Repositories;
 
-public class CardRepository : IAccountRepository
+public class CardRepository : ICardRepository
 {
     private readonly SoftBankDbContext _context;
 
@@ -51,6 +51,41 @@ public class CardRepository : IAccountRepository
         _context.Cards.Remove(card);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<CardStatisticsDto> GetCardStatistics(Guid cardId) 
+    {
+        
+
+        // Creating variables with LINQ references
+        var createdAt = DateTime.Now;
+        var transationsQuantity = _context.transactionCards.Count();
+        var spendAmount = _context.transactionCards.Where(t => t.Amount < 0).Sum(t => (decimal?)t.Amount * -1) ?? 0m;
+        var earnAmount = _context.transactionCards.Where(t => t.Amount > 0).Sum(t => (decimal?)t.Amount) ?? 0m;
+        var transactionsHistory = _context.transactionCards
+                    .Select(t => new TransactionCardDto
+                    {
+                        Id = t.Id,
+                        CommitmentTransaction = t.CommitmentTransaction,
+                        Amount = t.Amount,
+                        Description = t.Description,
+                        CardNumberRecipient = t.CardNumberRecipient,
+                        CardNumberSender = t.CardNumberSender,
+                        TrType = t.TrType,
+                        TrStatus = t.TrStatus,
+                        CurrencyType = t.CurrencyType
+                    }).ToList();
+
+        // Return of the completed AccountStatisticsDto
+        return new CardStatisticsDto
+        {
+            CardId = cardId,
+            CreatedAt = createdAt,
+            TransationsQuantity = transationsQuantity,
+            SpendAmount = spendAmount,
+            EarnAmount = earnAmount,
+            TransactionsHistory = transactionsHistory
+        };
     }
 
     private CardDto MapToDto(CardEntity card)

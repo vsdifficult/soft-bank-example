@@ -20,7 +20,7 @@ public class TransactionAccountRepository : ITransactionAccountsRepository
     }
 
     public async Task<IEnumerable<TransactionAccountDto>> GetAllAsync()
-    {
+    {                                       // Why are AccounT. In DbContext it named Accounts 
         var actransaction = await _context.TransactionAccount.ToListAsync();
         return actransactions.Select(MapToDto);
     }
@@ -71,6 +71,7 @@ public class TransactionAccountRepository : ITransactionAccountsRepository
         };
     }
 
+    // Why are endwith Entity, if class had been name "TransactionAccount"
     private TransactionAccountEntity MapToEntity(TransactionAccountDto actransaction)
     {
         return new TransactionAccountEntity

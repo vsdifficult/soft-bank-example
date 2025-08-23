@@ -7,7 +7,7 @@ public record AccountDto
 
     public Guid UserId { get; init; }
 
-    public List<CardEntity> Cards { get; init; }
+    public List<Guid> Cards { get; init; } = new List<Guid>();
 
     public Account AccountType { get; init; }
 

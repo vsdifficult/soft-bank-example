@@ -15,6 +15,7 @@ public class SoftBankDbContext : DbContext
     public DbSet<TransactionEntity> Transactions { get; set; }
     public DbSet<AccountEntity> Accounts { get; set; }
     public DbSet<TransactionAccount> transactionAccounts { get; set; }
+    public DbSet<TransactionCard> transactionCards { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

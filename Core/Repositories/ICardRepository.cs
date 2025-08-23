@@ -9,4 +9,6 @@ public interface ICardRepository : IRepository<CardDto, Guid>
     Task<CardDto> GetByCvvAsync(string cvv);
 
     Task<CardDto> GetByCardNumberAsync(string cardNumber);
+
+    Task<CardStatisticsDto> GetCardStatistics(Guid cardId);
 }

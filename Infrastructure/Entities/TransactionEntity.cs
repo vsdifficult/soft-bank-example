@@ -44,3 +44,22 @@ public class TransactionAccount : BaseEntity
 
     public Currency CurrencyType { get; set; }
 }
+
+public class TransactionCard : BaseEntity
+{
+    public DateTime CommitmentTransaction { get; init; }
+
+    public decimal Amount { get; init; }
+
+    public string Description { get; init; }
+
+    public Guid? CardNumberRecipient { get; init; }
+
+    public Guid? CardNumberSender { get; init; }
+
+    public TransactionType TrType { get; init; }
+
+    public TransactionStatus TrStatus { get; init; }
+
+    public Currency CurrencyType { get; init; }
+}
