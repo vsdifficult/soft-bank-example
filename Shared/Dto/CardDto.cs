@@ -1,6 +1,8 @@
+using SoftBank.Shared.Model;
+
 namespace SoftBank.Shared.Dto;
 
-public record CardDto 
+public record CardDto
 {
     public Guid Id { get; init; }
 
@@ -16,7 +18,7 @@ public record CardDto
 
     public string CVV { get; init; }
 
-    public List<TransactionEntity> Transactions { get; init; } = new List<TransactionEntity>();
+    public List<Guid> Transactions { get; init; } = new List<Guid>();
 }
 
 public record CardPaymentDto
@@ -38,7 +40,7 @@ public record TransactionCardDto
 
     public decimal Amount { get; init; }
 
-    public string Description { get; init; }
+    public string Description { get; init; } = string.Empty;
 
     public Guid? CardNumberRecipient { get; init; }
 
@@ -53,7 +55,7 @@ public record TransactionCardDto
 
 public record CardStatisticsDto
 {
-    public Guid AccountId { get; init; }
+    public Guid CardId { get; init; }
 
     public DateTime CreatedAt { get; init; }
 

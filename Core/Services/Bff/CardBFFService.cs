@@ -1,91 +1,70 @@
 using SoftBank.Shared.Dto;
 using SoftBank.Shared.Model;
 using SoftBank.Core.Services.Interfaces;
+using SoftBank.Core.Repositories;
 
 namespace SoftBank.Core.Services.BFF;
 
-// Доделать: Сделать IRep и Rep для переводов карт + конфиги. Сделать CardDto 
-// Закончить CardBFFService 
+// CardBFFService 
 public class CardBFFService : ICardBFFService
 {
-    private readonly ITransactionAccountsRepository _actransactionRepository;
+    private readonly ITransactionCardRepository _cardTransactionRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly ICardRepository _cardRepository;
 
-    public AccountBFFService(ITransactionAccountsRepository actransactionRepository)
+    public CardBFFService(ITransactionCardRepository cardTransactionRepository, IUserRepository userRepository, ICardRepository cardRepository)
     {
-        _actransactionRepository = actransactionRepository;
+        _cardTransactionRepository = cardTransactionRepository;
+        _userRepository = userRepository;
+        _cardRepository = cardRepository;
     }
 
-    public async Task<TransactionAccountDto> ProcessPayment(PaymentDto payment)
+    public async Task<TransactionCardDto> ProcessPayment(CardPaymentDto payment)
     {
-        var accountSender = await _actransactionRepository.GetByIdAsync(payment.AccountNumberSender);
+        var cardSender = await _cardTransactionRepository.GetByIdAsync(payment.CardNumberSender);
 
-        if (accountSender == null)
+        if (cardSender == null)
         {
-            throw new Exception("AccountSender not found.");
+            throw new Exception("cardSender not found.");
         }
 
-        var accountRecipient = await _actransactionRepository.GetByIdAsync(payment.AccountNumberRecipient);
+        var cardRecipient = await _cardTransactionRepository.GetByIdAsync(payment.CardNumberRecipient);
 
-        if (accountRecipient == null)
+        if (cardRecipient == null)
         {
-            throw new Exception("accountRecipient not found.");
+            throw new Exception("cardRecipient not found.");
         }
 
-        if (accountSender.CurrencyType != accountRecipient.CurrencyType)
+        if (cardSender.CurrencyType != cardRecipient.CurrencyType)
         {
             throw new Exception("CurrencyType is not available.");
         }
 
-        var actransaction = new TransactionAccountDto
+        var transactionCard = new TransactionCardDto
         {
             Id = Guid.NewGuid(),
             CommitmentTransaction = DateTime.Now,
             Amount = payment.Amount,
-            TrType = TransactionType.Trasfer,
+            TrType = TransactionType.Transfer,
             TrStatus = TransactionStatus.Pending,
             CurrencyType = payment.CurrencyType,
-            AccountNumberSender = payment.AccountNumberSender,
-            AccountNumberRecipient = payment.AccountNumberRecipient
+            CardNumberSender = payment.CardNumberSender,
+            CardNumberRecipient = payment.CardNumberRecipient
         };
 
-        accountSender.Amount -= payment.Amount;
-        accountRecipient.Amount += payment.Amount;
+        // Updating Users Balances
+        await _userRepository.UpdateUserBalance(cardSender.Id, cardSender.Amount - payment.Amount);
+        await _userRepository.UpdateUserBalance(cardRecipient.Id, cardRecipient.Amount + payment.Amount);
 
-        await _actransactionRepository.CreateAsync(actransaction);
+        await _cardTransactionRepository.CreateAsync(transactionCard);
 
-        return actransaction;
+        return transactionCard;
     }
 
 
-    public async Task<AccountStatisticsDto> GetStatistics(Guid accountId)
+    public async Task<CardStatisticsDto> GetStatistics(Guid cardId)
     {
-        // Var of account
-        var account = await _actransactionRepository.GetByIdAsync(accountId);
-
-        // Creating variables with LINQ references
-        var createdAt = DateTime.Now;
-        var transationsQuantity = account.Transactions.Count();
-        var spendAmount = account.Transactions.Where(t => t.Amount < 0).Sum(t => (decimal?)t.Amount * -1) ?? 0m;
-        var earnAmount = account.Transactions.Where(t => t.Amount > 0).Sum(t => (decimal?)t.Amount) ?? 0m;
-        var transactionsHistory = account.Transactions
-                    .OrderByDescending(t => t.TransactionDate)
-                    .Select(t => new TransactionAccountDto
-                    {
-                        TransactionId = t.Id,
-                        Amount = t.Amount,
-                        TransactionDate = t.TransactionDate,
-                        Description = t.Description
-                    }).ToList();
-
-        // Return of the completed AccountStatisticsDto
-        return new AccountStatisticsDto
-        {
-            AccountId = accountId,
-            CreatedAt = createdAt,
-            TransactionsQuantity = transationsQuantity,
-            SpendAmount = spendAmount,
-            EarnAmount = earnAmount,
-            TransactionsHistory = transactionsHistory
-        };
+        // Retuurn Stat
+        return await _cardRepository.GetCardStatistics(cardId);
     }
 }

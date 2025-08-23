@@ -21,13 +21,13 @@ public class TransactionCardRepository : ITransactionCardRepository
 
     public async Task<IEnumerable<TransactionCardDto>> GetAllAsync()
     {
-        var actransaction = await _context.TransactionCards.ToListAsync();
-        return actransactions.Select(MapToDto);
+        var actransaction = await _context.transactionCards.ToListAsync();
+        return actransaction.Select(MapToDto);
     }
 
     public async Task<TransactionCardDto?> GetByIdAsync(Guid actransactionId)
     {
-        var actransaction = await _context.TransactionsAccount.FindAsync(actransactionId);
+        var actransaction = await _context.transactionCards.FindAsync(actransactionId);
         return actransaction == null ? null : MapToDto(actransaction);
     }
 
@@ -36,19 +36,34 @@ public class TransactionCardRepository : ITransactionCardRepository
         var actransactionEntity = MapToEntity(actransaction);
         actransactionEntity.Id = Guid.NewGuid();
 
-        await _context.TransactionAccount.AddAsync(TransactionAccountEntity);
+        await _context.transactionCards.AddAsync(actransactionEntity);
         await _context.SaveChangesAsync();
 
-        return TransactionAccountEntity.Id;
+        return actransactionEntity.Id;
+    }
+
+    public async Task<bool> UpdateAsync(TransactionCardDto cardDto)
+    {
+        var actransaction = await _context.transactionCards.FindAsync(cardDto.Id);
+        if (actransaction == null)
+            return false;
+
+        // Update function
+        _context.transactionCards.Update(MapToEntity(cardDto));
+
+        // Save changes
+        await _context.SaveChangesAsync();
+        
+        return true;
     }
 
     public async Task<bool> DeleteAsync(Guid actransactionId)
     {
-        var actransaction = await _context.TransactionCards.FindAsync(actransactionId);
+        var actransaction = await _context.transactionCards.FindAsync(actransactionId);
         if (actransaction == null)
             return false;
 
-        _context.TransactionCards.Remove(actransaction);
+        _context.transactionCards.Remove(actransaction);
         await _context.SaveChangesAsync();
         return true;
     }
@@ -60,7 +75,7 @@ public class TransactionCardRepository : ITransactionCardRepository
             Id = actransaction.Id,
             CommitmentTransaction = actransaction.CommitmentTransaction,
             Amount = actransaction.Amount,
-            Description = actransaction.Description;
+            Description = actransaction.Description,
             CardNumberRecipient = actransaction.CardNumberRecipient,
             CardNumberSender = actransaction.CardNumberSender,
             TrType = actransaction.TrType,
@@ -71,12 +86,12 @@ public class TransactionCardRepository : ITransactionCardRepository
 
     private TransactionCard MapToEntity(TransactionCardDto actransaction)
     {
-        return new TransactionAccountEntity
+        return new TransactionCard
         {
             Id = actransaction.Id,
             CommitmentTransaction = actransaction.CommitmentTransaction,
             Amount = actransaction.Amount,
-            Description = actransaction.Description;
+            Description = actransaction.Description,
             CardNumberRecipient = actransaction.CardNumberRecipient,
             CardNumberSender = actransaction.CardNumberSender,
             TrType = actransaction.TrType,

@@ -31,7 +31,6 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
         {
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
-
                 return false;
             var user_dto = MapToDto(user);
             user_dto.Balance = balance;
