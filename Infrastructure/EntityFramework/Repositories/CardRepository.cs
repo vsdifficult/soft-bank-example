@@ -18,11 +18,30 @@ public class CardRepository : ICardRepository
     {
         _context = context;
     }
-
+    public async Task<CardDto> GetByUserIdAsync(Guid userId)
+    {
+        var card = await _context.Cards.AsNoTracking().FirstOrDefaultAsync(c => c.UserId == userId);
+        return card == null ? null : MapToDto(card);
+    }
+    public async Task<CardDto?> GetByAccountIdAsync(Guid accountId)
+    {
+        var card = await _context.Cards.AsNoTracking().FirstOrDefaultAsync(c => c.AccountId == accountId);
+        return card == null ? null : MapToDto(card);
+    }
+    public async Task<CardDto> GetByCvvAsync(string cvv)
+    {
+        var card = await _context.Cards.AsNoTracking().FirstOrDefaultAsync(c => c.CVV == cvv);
+        return card == null ? null : MapToDto(card);
+    }
     public async Task<IEnumerable<CardDto>> GetAllAsync()
     {
-        var card = await _context.Cards.ToListAsync();
-        return cards.Select(MapToDto);
+        var card = await _context.Cards.AsNoTracking().ToListAsync();
+        return card.Select(MapToDto);
+    }
+    public async Task<CardDto> GetByCardNumberAsync(string cardNumber)
+    {
+        var card = await _context.Cards.AsNoTracking().FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+        return card == null ? null : MapToDto(card);
     }
 
     public async Task<CardDto?> GetByIdAsync(Guid cardId)
@@ -52,10 +71,18 @@ public class CardRepository : ICardRepository
         await _context.SaveChangesAsync();
         return true;
     }
-
-    public async Task<CardStatisticsDto> GetCardStatistics(Guid cardId) 
+    public async Task<bool> UpdateAsync(CardDto card)
     {
-        
+        var cardEntity = await _context.Cards.FindAsync(card.Id);
+        if (cardEntity == null) return false;
+
+        _context.Cards.Update(MapToEntity(card));
+        await _context.SaveChangesAsync();
+        return true;
+    }
+    public async Task<CardStatisticsDto> GetCardStatistics(Guid cardId)
+    {
+
 
         // Creating variables with LINQ references
         var createdAt = DateTime.Now;

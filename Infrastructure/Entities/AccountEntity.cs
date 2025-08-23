@@ -1,3 +1,4 @@
+using SoftBank.Shared.Model;
 namespace SoftBank.Infrastructure.Entities;
 
 public class AccountEntity : BaseEntity
@@ -6,7 +7,7 @@ public class AccountEntity : BaseEntity
 
     public Guid UserId { get; set; }
 
-    public List<CardEntity> Cards { get; set; }
+    public List<Guid> Cards { get; set; } = new List<Guid>();
 
     public Account AccountType { get; set; }
 

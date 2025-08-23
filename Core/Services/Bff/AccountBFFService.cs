@@ -1,16 +1,21 @@
 using SoftBank.Shared.Dto;
 using SoftBank.Shared.Model;
 using SoftBank.Core.Services.Interfaces;
+using SoftBank.Core.Repositories;
 
 namespace SoftBank.Core.Services.BFF;
 
 public class AccountBFFService : IAccountBFFService
 {
-    private readonly ITransactionAccountsRepository _actransactionRepository;
+    private readonly ITransactionAccountsRepository _actransactionRepository; 
+    private readonly IUserRepository _userRepository; 
+    private readonly IAccountRepository _accountRepository;
 
-    public AccountBFFService(ITransactionAccountsRepository actransactionRepository)
+    public AccountBFFService(ITransactionAccountsRepository actransactionRepository, IUserRepository userRepository, IAccountRepository accountRepository)
     {
         _actransactionRepository = actransactionRepository;
+        _userRepository = userRepository;
+        _accountRepository = accountRepository;
     }
 
     public async Task<TransactionAccountDto> ProcessPayment(PaymentDto payment)
@@ -39,16 +44,16 @@ public class AccountBFFService : IAccountBFFService
             Id = Guid.NewGuid(),
             CommitmentTransaction = DateTime.Now,
             Amount = payment.Amount,
-            TrType = TransactionType.Trasfer,
+            TrType = TransactionType.Transfer,
             TrStatus = TransactionStatus.Pending,
             CurrencyType = payment.CurrencyType,
             AccountNumberSender = payment.AccountNumberSender,
             AccountNumberRecipient = payment.AccountNumberRecipient
         };
 
-        accountSender.Amount -= payment.Amount;
-        accountRecipient.Amount += payment.Amount;
-        
+        await _userRepository.UpdateUserBalance(accountSender.Id, accountSender.Amount - payment.Amount);
+        await _userRepository.UpdateUserBalance(accountRecipient.Id, accountRecipient.Amount + payment.Amount);
+
         await _actransactionRepository.CreateAsync(actransaction);
 
         return actransaction;
@@ -57,33 +62,6 @@ public class AccountBFFService : IAccountBFFService
 
     public async Task<AccountStatisticsDto> GetStatistics(Guid accountId)
     {
-        // Var of account
-        var account = await _actransactionRepository.GetByIdAsync(accountId);
-
-        // Creating variables with LINQ references
-        var createdAt = DateTime.Now;
-        var transationsQuantity = account.Transactions.Count();
-        var spendAmount = account.Transactions.Where(t => t.Amount < 0).Sum(t => (decimal?)t.Amount * -1) ?? 0m;
-        var earnAmount = account.Transactions.Where(t => t.Amount > 0).Sum(t => (decimal?)t.Amount) ?? 0m;
-        var transactionsHistory = account.Transactions
-                    .OrderByDescending(t => t.TransactionDate)
-                    .Select(t => new TransactionAccountDto
-                    {
-                        TransactionId = t.Id,
-                        Amount = t.Amount,
-                        TransactionDate = t.TransactionDate,
-                        Description = t.Description
-                    }).ToList();
-
-        // Return of the completed AccountStatisticsDto
-        return new AccountStatisticsDto
-        {
-            AccountId = accountId,
-            CreatedAt = createdAt,
-            TransactionsQuantity = transationsQuantity,
-            SpendAmount = spendAmount,
-            EarnAmount = earnAmount,
-            TransactionsHistory = transactionsHistory
-        };
+        return await _accountRepository.GetAccountStatistics(accountId);
     }
 }

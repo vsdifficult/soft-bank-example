@@ -21,13 +21,13 @@ public class TransactionAccountRepository : ITransactionAccountsRepository
 
     public async Task<IEnumerable<TransactionAccountDto>> GetAllAsync()
     {                                       // Why are AccounT. In DbContext it named Accounts 
-        var actransaction = await _context.TransactionAccount.ToListAsync();
-        return actransactions.Select(MapToDto);
+        var actransaction = await _context.transactionAccounts.ToListAsync();
+        return actransaction.Select(MapToDto);
     }
 
     public async Task<TransactionAccountDto?> GetByIdAsync(Guid actransactionId)
     {
-        var actransaction = await _context.TransactionsAccount.FindAsync(actransactionId);
+        var actransaction = await _context.transactionAccounts.FindAsync(actransactionId);
         return actransaction == null ? null : MapToDto(actransaction);
     }
 
@@ -36,35 +36,41 @@ public class TransactionAccountRepository : ITransactionAccountsRepository
         var actransactionEntity = MapToEntity(actransaction);
         actransactionEntity.Id = Guid.NewGuid(); 
 
-        await _context.TransactionAccount.AddAsync(TransactionAccountEntity);
+        await _context.transactionAccounts.AddAsync(actransactionEntity);
         await _context.SaveChangesAsync();
 
-        return TransactionAccountEntity.Id;
+        return actransactionEntity.Id;
     }
+    public async Task<bool> UpdateAsync(TransactionAccountDto accountDto)
+    { 
+        var transaction = await _context.transactionAccounts.FindAsync(accountDto.Id);
+        if (transaction == null) return false;
 
+        _context.transactionAccounts.Update(MapToEntity(accountDto));
+        await _context.SaveChangesAsync();
+        return true;
+    }
     public async Task<bool> DeleteAsync(Guid actransactionId)
     {
-        var actransaction = await _context.TransactionAccount.FindAsync(actransactionId);
+        var actransaction = await _context.transactionAccounts.FindAsync(actransactionId);
         if (actransaction == null)
             return false;
 
-        _context.TransactionAccount.Remove(actransaction);
+        _context.transactionAccounts.Remove(actransaction);
         await _context.SaveChangesAsync();
         return true;
     }
 
-    private TransactionAccountDto MapToDto(TransactionAccountEntity actransaction)
+    private TransactionAccountDto MapToDto(TransactionAccount actransaction)
     {
         return new TransactionAccountDto
         {
             Id = actransaction.Id,
             CommitmentTransaction = actransaction.CommitmentTransaction,
             Amount = actransaction.Amount,
-            Description = actransaction.Description;
+            Description = actransaction.Description, 
             AccountNumberRecipient = actransaction.AccountNumberRecipient,
             AccountNumberSender = actransaction.AccountNumberSender,
-            UserSender = actransaction.UserSender,
-            UserRecipient = actransaction.UserRecipient,
             TrType = actransaction.TrType,
             TrStatus = actransaction.TrStatus,
             CurrencyType = actransaction.CurrencyType
@@ -72,18 +78,16 @@ public class TransactionAccountRepository : ITransactionAccountsRepository
     }
 
     // Why are endwith Entity, if class had been name "TransactionAccount"
-    private TransactionAccountEntity MapToEntity(TransactionAccountDto actransaction)
+    private TransactionAccount MapToEntity(TransactionAccountDto actransaction)
     {
-        return new TransactionAccountEntity
+        return new TransactionAccount
         {
             Id = actransaction.Id,
             CommitmentTransaction = actransaction.CommitmentTransaction,
             Amount = actransaction.Amount,
-            Description = actransaction.Description;
+            Description = actransaction.Description,
             AccountNumberRecipient = actransaction.AccountNumberRecipient,
             AccountNumberSender = actransaction.AccountNumberSender,
-            UserSender = actransaction.UserSender,
-            UserRecipient = actransaction.UserRecipient,
             TrType = actransaction.TrType,
             TrStatus = actransaction.TrStatus,
             CurrencyType = actransaction.CurrencyType

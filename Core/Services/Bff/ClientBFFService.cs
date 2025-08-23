@@ -6,5 +6,4 @@ namespace SoftBank.Core.Services.BFF;
 public class ClientBFFService : IClientBFFService
 {
     
-
 }

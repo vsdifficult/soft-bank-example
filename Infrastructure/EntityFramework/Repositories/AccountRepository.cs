@@ -22,7 +22,7 @@ public class AccountRepository : IAccountRepository
     public async Task<IEnumerable<AccountDto>> GetAllAsync()
     {
         var account = await _context.Accounts.ToListAsync();
-        return accounts.Select(MapToDto);
+        return account.Select(MapToDto);
     }
 
     public async Task<AccountDto?> GetByIdAsync(Guid accountId)
@@ -52,7 +52,50 @@ public class AccountRepository : IAccountRepository
         await _context.SaveChangesAsync();
         return true;
     }
+    public async Task<bool> UpdateAsync(AccountDto accountDto)
+    {
+        var account = await _context.Accounts.FindAsync(accountDto.Id);
+        if (account == null) return false;
 
+        _context.Accounts.Update(MapToEntity(accountDto));
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<AccountStatisticsDto> GetAccountStatistics(Guid accountId)
+    { 
+
+        // Creating variables with LINQ references
+        var createdAt = DateTime.Now;
+        var transationsQuantity = _context.transactionAccounts.Count();
+        var spendAmount = _context.transactionAccounts.Where(t => t.Amount < 0).Sum(t => (decimal?)t.Amount * -1) ?? 0m;
+        var earnAmount = _context.transactionAccounts.Where(t => t.Amount > 0).Sum(t => (decimal?)t.Amount) ?? 0m;
+        var transactionsHistory = _context.transactionAccounts
+                    .OrderByDescending(t => t.CommitmentTransaction)
+                    .Select(t => new TransactionAccountDto
+                    {
+                        Id = t.Id,
+                        Amount = t.Amount,
+                        CommitmentTransaction = t.CommitmentTransaction,
+                        Description = t.Description,
+                        CurrencyType = t.CurrencyType,
+                        TrType = t.TrType,
+                        TrStatus = t.TrStatus,
+                        AccountNumberSender = t.AccountNumberSender,
+                        AccountNumberRecipient = t.AccountNumberRecipient
+                    }).ToList();
+
+        // Return of the completed AccountStatisticsDto
+        return new AccountStatisticsDto
+        {
+            AccountId = accountId,
+            CreatedAt = createdAt,
+            TransationsQuantity = transationsQuantity,
+            SpendAmount = spendAmount,
+            EarnAmount = earnAmount,
+            TransactionsHistory = transactionsHistory
+        };
+    }
     private AccountDto MapToDto(AccountEntity account)
     {
         return new AccountDto
