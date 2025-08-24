@@ -6,6 +6,8 @@
 *.userosscache
 *.sln.docstates
 
+.obj/
+.bin/
 # Mono auto generated files
 mono_crash.*
 
