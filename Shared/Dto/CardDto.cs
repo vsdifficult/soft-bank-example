@@ -14,7 +14,9 @@ public record CardDto
 
     public string CardHolderName { get; init; }
 
-    public DateTime ExpirationDate { get; init; }
+    public DateTime ExpirationDate { get; init; } 
+    public Currency CurrencyType { get; init; }
+    public decimal Amount { get; init; }
 
     public string CVV { get; init; }
 
