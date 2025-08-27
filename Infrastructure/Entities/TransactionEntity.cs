@@ -34,9 +34,9 @@ public class TransactionAccount : BaseEntity
 
     public string Description { get; set; } = string.Empty;
 
-    public Guid? AccountNumberRecipient { get; set; }
+    public Guid AccountNumberRecipient { get; set; }
 
-    public Guid? AccountNumberSender { get; set; }
+    public Guid AccountNumberSender { get; set; }
 
     public TransactionType TrType { get; set; }
 
@@ -53,9 +53,9 @@ public class TransactionCard : BaseEntity
 
     public string Description { get; init; }
 
-    public Guid? CardNumberRecipient { get; init; }
+    public Guid CardNumberRecipient { get; init; }
 
-    public Guid? CardNumberSender { get; init; }
+    public Guid CardNumberSender { get; init; }
 
     public TransactionType TrType { get; init; }
 

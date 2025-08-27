@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace SoftBank.Infrastructure.EntityFramework.Repositories
 {
@@ -15,6 +16,7 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly SoftBankDbContext _context;
+
 
         public UserRepository(SoftBankDbContext context)
         {
@@ -48,7 +50,7 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
 
         public async Task<UserDto> GetByEmailAsync(string email)
         {
-            return await _context.Users.Where(u => u.Email==email).Select(u => new UserDto{Id = u.Id, FirstName = u.FirstName, LastName = u.LastName, Email = u.Email, Login = u.Login, Password = u.Password, DateOfBirth = u.DateOfBirth, UserRole = u.UserRole, Code = u.Code}).FirstOrDefaultAsync(); 
+            return await _context.Users.Where(u => u.Email == email).Select(u => new UserDto { Id = u.Id, FirstName = u.FirstName, LastName = u.LastName, Email = u.Email, Login = u.Login, Password = u.Password, DateOfBirth = u.DateOfBirth, UserRole = u.UserRole, Code = u.Code }).FirstOrDefaultAsync();
         }
 
         // ������� ������ ������������
@@ -80,6 +82,22 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
             _context.Users.Update(existingUser);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        private async Task<Guid> GetByCardId(Guid cardId)
+        {
+            var card = _context.Cards.AsNoTracking().FirstOrDefault(c => c.Id == cardId);
+            var user = _context.Users.AsNoTracking().FirstOrDefault(u => u.Id == card.UserId);
+
+            return user.Id;
+        }
+
+        private async Task<Guid> GetByAccountId(Guid accountId)
+        {
+            var account = _context.Accounts.AsNoTracking().FirstOrDefault(a => a.Id == accountId);
+            var user = _context.Users.AsNoTracking().FirstOrDefault(u => u.Id == account.UserId);
+
+            return user.Id;
         }
 
         // ������� ������������
@@ -121,5 +139,54 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
                 Password = user.Password
             };
         }
+
+        // Сделать функцию GetByAccountId
+        
+        public async Task<List<ClientHistoryPayments>> GetClientHistoryPaymentsAsync(Guid userId)
+        {
+            // Dtos vars
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
+            var card = await _context.Cards.AsNoTracking().FirstOrDefaultAsync(c => c.UserId == userId);
+            var account = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.UserId == userId);
+            // Dtos Id
+            var cardId = card.Id;
+            var accountId = account.Id;
+            // Exist Check
+            if (user == null)
+                throw new Exception("User not found.");
+
+
+            // Creating ClientHistoryPayments from two types of transactions
+            var cardTransactions = _context.transactionCards
+                .Where(t => t.CardNumberSender == cardId || t.CardNumberRecipient == cardId)
+                .Select(t => new ClientHistoryPayments
+                {
+                    Type = "Card Transaction",
+                    userIdSender = Convert.ToString(GetByCardId(t.CardNumberSender)),
+                    userIdRecipient = Convert.ToString(GetByCardId(t.CardNumberRecipient)),
+                    Amount = t.Amount,
+                    TransactionId = t.Id,
+                    Date = t.CommitmentTransaction
+                });
+
+            var accountTransactions = _context.transactionAccounts
+                .Where(t => t.AccountNumberSender == accountId || t.AccountNumberRecipient == accountId)
+                .Select(t => new ClientHistoryPayments
+                {
+                    Type = "Account Transaction",
+                    userIdSender = Convert.ToString(GetByAccountId(t.AccountNumberSender)),
+                    userIdRecipient = Convert.ToString(GetByAccountId(t.AccountNumberRecipient)),
+                    Amount = t.Amount,
+                    TransactionId = t.Id,
+                    Date = t.CommitmentTransaction
+                });
+
+            // Сombine both types of Histories and return the result.
+            var combinedQuery = cardTransactions.Union(accountTransactions);
+
+
+            return (List<ClientHistoryPayments>)combinedQuery;
+        }
     }
 }
+
