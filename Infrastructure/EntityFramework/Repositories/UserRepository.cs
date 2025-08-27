@@ -174,8 +174,8 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
                 .Select(t => new ClientHistoryPayments
                 {
                     Type = "Account Transaction",
-                    userIdSender = Convert.ToString(GetByCardId(t.AccountNumberSender)),
-                    userIdRecipient = Convert.ToString(GetByCardId(t.AccountNumberRecipient)),
+                    userIdSender = Convert.ToString(GetByAccountId(t.AccountNumberSender)),
+                    userIdRecipient = Convert.ToString(GetByAccountId(t.AccountNumberRecipient)),
                     Amount = t.Amount,
                     TransactionId = t.Id,
                     Date = t.CommitmentTransaction
