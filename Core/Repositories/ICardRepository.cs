@@ -11,4 +11,6 @@ public interface ICardRepository : IRepository<CardDto, Guid>
     Task<CardDto> GetByCardNumberAsync(string cardNumber);
 
     Task<CardStatisticsDto> GetCardStatistics(Guid cardId);
+
+    Task<List<CardDto>> GetCardsForUserAsync(Guid userId);
 }

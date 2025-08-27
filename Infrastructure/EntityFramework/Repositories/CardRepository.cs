@@ -50,10 +50,28 @@ public class CardRepository : ICardRepository
         return card == null ? null : MapToDto(card);
     }
 
+    public async Task<List<CardDto>> GetCardsForUserAsync(Guid userId)
+    {
+        return await _context.Cards.AsNoTracking()
+            .Where(u => u.UserId == userId)
+            .Select(u => new CardDto
+            {
+                Id = u.Id,
+                CardNumber = u.CardNumber,
+                CardHolderName = u.CardHolderName,
+                ExpirationDate = u.ExpirationDate,
+                CVV = u.CVV,
+                UserId = u.UserId,
+                Transactions = u.Transactions,
+                AccountId = u.AccountId
+            })
+            .ToListAsync();
+    } 
+
     public async Task<Guid> CreateAsync(CardDto card)
     {
         var cardEntity = MapToEntity(card);
-        cardEntity.Id = Guid.NewGuid(); 
+        cardEntity.Id = Guid.NewGuid();
 
         await _context.Cards.AddAsync(cardEntity);
         await _context.SaveChangesAsync();

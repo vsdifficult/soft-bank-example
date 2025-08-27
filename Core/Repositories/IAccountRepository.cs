@@ -4,5 +4,7 @@ namespace SoftBank.Core.Repositories;
 
 public interface IAccountRepository : IRepository<AccountDto, Guid>
 {
-    Task<AccountStatisticsDto> GetAccountStatistics(Guid accountId); 
+    Task<AccountStatisticsDto> GetAccountStatistics(Guid accountId);
+
+    Task<List<AccountDto>> GetAccountsForUserAsync(Guid userId);
 }

@@ -100,6 +100,7 @@ namespace SoftBank.Infrastructure.EntityFramework.Repositories
             return user.Id;
         }
 
+
         // ������� ������������
         public async Task<bool> DeleteAsync(Guid userId)
         {
