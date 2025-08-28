@@ -96,6 +96,24 @@ public class AccountRepository : IAccountRepository
             TransactionsHistory = transactionsHistory
         };
     }
+
+    public async Task<List<AccountDto>> GetAccountsForUserAsync(Guid userId)
+    {
+        return await _context.Accounts.AsNoTracking()
+            .Where(u => u.UserId == userId)
+            .Select(u => new AccountDto
+            {
+                Id = u.Id,
+                UserId = u.UserId,
+                Cards = u.Cards,
+                AccountType = u.AccountType,
+                CurrencyType = u.CurrencyType,
+                Amount = u.Amount,
+                CreatedAt = u.CreatedAt
+            })
+            .ToListAsync();
+    } 
+
     private AccountDto MapToDto(AccountEntity account)
     {
         return new AccountDto

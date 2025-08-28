@@ -33,6 +33,15 @@ public record PaymentDto
 public record TransferDto
 {
     public Guid SenderId { get; init; }
+
+    public Guid CardSenderId { get; init; }
+
+    public Guid CardRecipientId { get; init; }
+
+    public Guid AccountSenderId { get; init; }
+
+    public Guid AccountRecipientId { get; init; }
+
     public Guid RecipientId { get; init; }
 
     public decimal Amount { get; init; }
