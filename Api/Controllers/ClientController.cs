@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SoftBank.Core.Services.Interfaces;
 using SoftBank.Shared.Model;
-using SoftBank.Core.Services.Bff;
+using SoftBank.Core.Services.BFF;
+using SoftBank.Shared.Dto;
 
 namespace SoftBank.Api.Contollers;
 
@@ -11,18 +12,18 @@ public class ClientEnpoints : ControllerBase
 {
     private readonly IDataService _dataService;
     private readonly IClientBFFService _clientBFFService;
-    public AccountEnpoints(IDataService dataService, IClientBFFService clientBFFService)
+    public ClientEnpoints(IDataService dataService, IClientBFFService clientBFFService)
     {
         _dataService = dataService;
         _clientBFFService = clientBFFService;
     }
 
-    [HttpPost("get/{Id}/accounts")]
-    public async Task<IActionResult> EndpointGetAccountsForUserAsync(Guid userId)
+    [HttpPost("get/{Id}/")]
+    public async Task<IActionResult> EndpointGetUsersForUserAsync(Guid userId)
     {
         try
         {
-            var accounts = await _clientBFFService.GetAccountsForUser(userId);
+            var user = await _clientBFFService.GetAccountsForUser(userId);
             return Ok(user);
         }
         catch (Exception e)
@@ -37,7 +38,7 @@ public class ClientEnpoints : ControllerBase
         try
         {
             var cards = await _clientBFFService.GetCardsForUser(userId);
-            return Ok(user);
+            return Ok(cards);
         }
         catch (Exception e)
         {
@@ -51,7 +52,7 @@ public class ClientEnpoints : ControllerBase
         try
         {
             var history = await _clientBFFService.HistoryOfTransactions(userId);
-            return Ok(user);
+            return Ok(history);
         }
         catch (Exception e)
         {
@@ -65,7 +66,7 @@ public class ClientEnpoints : ControllerBase
         try
         {
             var transaction = await _clientBFFService.TransactionTransferAsync(transfer);
-            return Ok(user);
+            return Ok(transaction);
         }
         catch (Exception e)
         {
