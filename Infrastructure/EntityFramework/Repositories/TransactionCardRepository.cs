@@ -92,8 +92,8 @@ public class TransactionCardRepository : ITransactionCardRepository
             CommitmentTransaction = actransaction.CommitmentTransaction,
             Amount = actransaction.Amount,
             Description = actransaction.Description,
-            CardNumberRecipient = actransaction.CardNumberRecipient,
-            CardNumberSender = actransaction.CardNumberSender,
+            CardNumberRecipient = actransaction.CardNumberRecipient ?? Guid.Empty,
+            CardNumberSender = actransaction.CardNumberSender ?? Guid.Empty,
             TrType = actransaction.TrType,
             TrStatus = actransaction.TrStatus,
             CurrencyType = actransaction.CurrencyType

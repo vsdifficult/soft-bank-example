@@ -13,7 +13,6 @@ public class CardEntity : BaseEntity
 
     public Guid UserId { get; set; }
 
-    public List<Guid> Transactions { get; set; } = new List<Guid>();
-
-    public Guid AccountId { get; set; }
+    public Guid AccountId { get; set; } 
+    public List<Guid> Transactions { get; init; } = new List<Guid>();
 }

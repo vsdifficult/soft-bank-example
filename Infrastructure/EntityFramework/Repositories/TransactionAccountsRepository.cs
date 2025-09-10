@@ -10,30 +10,31 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace SoftBank.Infrastructure.EntityFramework.Repositories;
 
-public class TransactionAccountRepository : ITransactionAccountsRepository
+public class TransactionAccountsRepository : ITransactionAccountsRepository
 {   
     private readonly SoftBankDbContext _context;
 
-    public TransactionAccountRepository(SoftBankDbContext context)
+    public TransactionAccountsRepository(SoftBankDbContext context)
     {
         _context = context;
     }
 
     public async Task<IEnumerable<TransactionAccountDto>> GetAllAsync()
-    {                                       // Why are AccounT. In DbContext it named Accounts 
+    {                                      
         var actransaction = await _context.transactionAccounts.ToListAsync();
         return actransaction.Select(MapToDto);
     }
 
-    public async Task<TransactionAccountDto?> GetByIdAsync(Guid actransactionId)
+
+    public async Task<TransactionAccountDto?> GetByIdAsync(Guid transactionAccountId)
     {
-        var actransaction = await _context.transactionAccounts.FindAsync(actransactionId);
+        var actransaction = await _context.transactionAccounts.FindAsync(transactionAccountId);
         return actransaction == null ? null : MapToDto(actransaction);
     }
 
-    public async Task<Guid> CreateAsync(TransactionAccountDto actransaction)
+    public async Task<Guid> CreateAsync(TransactionAccountDto transactionAccountDto)
     {
-        var actransactionEntity = MapToEntity(actransaction);
+        var actransactionEntity = MapToEntity(transactionAccountDto);
         actransactionEntity.Id = Guid.NewGuid(); 
 
         await _context.transactionAccounts.AddAsync(actransactionEntity);
@@ -41,18 +42,18 @@ public class TransactionAccountRepository : ITransactionAccountsRepository
 
         return actransactionEntity.Id;
     }
-    public async Task<bool> UpdateAsync(TransactionAccountDto accountDto)
+    public async Task<bool> UpdateAsync(TransactionAccountDto transactionAccountDto)
     { 
-        var transaction = await _context.transactionAccounts.FindAsync(accountDto.Id);
+        var transaction = await _context.transactionAccounts.FindAsync(transactionAccountDto.Id);
         if (transaction == null) return false;
 
-        _context.transactionAccounts.Update(MapToEntity(accountDto));
+        _context.transactionAccounts.Update(MapToEntity(transactionAccountDto));
         await _context.SaveChangesAsync();
         return true;
     }
-    public async Task<bool> DeleteAsync(Guid actransactionId)
+    public async Task<bool> DeleteAsync(Guid transactionAccountId)
     {
-        var actransaction = await _context.transactionAccounts.FindAsync(actransactionId);
+        var actransaction = await _context.transactionAccounts.FindAsync(transactionAccountId);
         if (actransaction == null)
             return false;
 
@@ -61,36 +62,35 @@ public class TransactionAccountRepository : ITransactionAccountsRepository
         return true;
     }
 
-    private TransactionAccountDto MapToDto(TransactionAccount actransaction)
+    private TransactionAccountDto MapToDto(TransactionAccount transactionAccount)
     {
         return new TransactionAccountDto
         {
-            Id = actransaction.Id,
-            CommitmentTransaction = actransaction.CommitmentTransaction,
-            Amount = actransaction.Amount,
-            Description = actransaction.Description, 
-            AccountNumberRecipient = actransaction.AccountNumberRecipient,
-            AccountNumberSender = actransaction.AccountNumberSender,
-            TrType = actransaction.TrType,
-            TrStatus = actransaction.TrStatus,
-            CurrencyType = actransaction.CurrencyType
+            Id = transactionAccount.Id,
+            CommitmentTransaction = transactionAccount.CommitmentTransaction,
+            Amount = transactionAccount.Amount,
+            Description = transactionAccount.Description, 
+            AccountNumberRecipient = transactionAccount.AccountNumberRecipient ,
+            AccountNumberSender = transactionAccount.AccountNumberSender,
+            TrType = transactionAccount.TrType,
+            TrStatus = transactionAccount.TrStatus,
+            CurrencyType = transactionAccount.CurrencyType
         };
     }
 
-    // Why are endwith Entity, if class had been name "TransactionAccount"
-    private TransactionAccount MapToEntity(TransactionAccountDto actransaction)
+    private TransactionAccount MapToEntity(TransactionAccountDto transactionAccountDto)
     {
         return new TransactionAccount
         {
-            Id = actransaction.Id,
-            CommitmentTransaction = actransaction.CommitmentTransaction,
-            Amount = actransaction.Amount,
-            Description = actransaction.Description,
-            AccountNumberRecipient = actransaction.AccountNumberRecipient,
-            AccountNumberSender = actransaction.AccountNumberSender,
-            TrType = actransaction.TrType,
-            TrStatus = actransaction.TrStatus,
-            CurrencyType = actransaction.CurrencyType
+            Id = transactionAccountDto.Id,
+            CommitmentTransaction = transactionAccountDto.CommitmentTransaction,
+            Amount = transactionAccountDto.Amount,
+            Description = transactionAccountDto.Description,
+            AccountNumberRecipient = transactionAccountDto.AccountNumberRecipient ?? Guid.Empty,
+            AccountNumberSender = transactionAccountDto.AccountNumberSender ?? Guid.Empty,
+            TrType = transactionAccountDto.TrType,
+            TrStatus = transactionAccountDto.TrStatus,
+            CurrencyType = transactionAccountDto.CurrencyType
         };
     }
 }

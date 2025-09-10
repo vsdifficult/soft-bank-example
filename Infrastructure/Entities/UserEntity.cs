@@ -20,9 +20,7 @@ public class UserEntity : BaseEntity
 
     public List<CardEntity> Cards { get; set; } = [];
 
-    public List<TransactionEntity> Transactions { get; set; } = [];
+    public ICollection<TransactionEntity> SentTransactions { get; set; } = [];
 
-    // public List<TransactionEntity> SentTransactions { get; set; } = [];
-
-    // public List<TransactionEntity> ReceivedTransactions { get; set; } = [];
+    public ICollection<TransactionEntity> ReceivedTransactions { get; set; } = [];
 }

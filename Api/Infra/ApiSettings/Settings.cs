@@ -10,6 +10,10 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using SoftBank.Core.Services.BFF;
+using SoftBank.Infrastructure.Services;
+using SoftBank.Core.Repositories;
+using SoftBank.Infrastructure.EntityFramework.Repositories;
+using SoftBank.Infrastructure.EntityFramework;
 
 namespace SoftBank.Api.Infra;
 
@@ -17,6 +21,8 @@ public static class ApiExtensions
 {
     public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddDbContext<SoftBankDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
         services.AddCors(options =>
         {
             options.AddPolicy("AllowAllOrigins",
@@ -30,13 +36,22 @@ public static class ApiExtensions
         services.AddSignalR();
         services.AddEndpointsApiExplorer();
         services.AddControllers(); 
-        // ConfigureSwagger(services); 
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "SoftBank API", Version = "v1" });
+        }); 
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IAccountBFFService, AccountBFFService>();
 
-        // services.AddScoped<IDataService, DataService>(); 
+        services.AddScoped<IDataService, DataService>(); 
         services.AddScoped<ICardBFFService, CardBFFService>();
         services.AddScoped<IClientBFFService, ClientBFFService>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<ICardRepository, CardRepository>();
+        services.AddScoped<ITransactionCardRepository, TransactionCardRepository>();
+        services.AddScoped<ITransactionAccountsRepository, TransactionAccountsRepository>();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -65,6 +80,7 @@ public static class ApiExtensions
             c =>
             {
                 c.SwaggerEndpoint("/api-docs/v1/swagger.json", "Test bank system");
+                c.RoutePrefix = "api-docs";
                 c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
                 c.DefaultModelExpandDepth(0);
                 c.DisplayRequestDuration();
@@ -77,7 +93,9 @@ public static class ApiExtensions
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapGet("/", () => Results.Redirect("/api-docs/v1"))
+        app.MapControllers();
+
+        app.MapGet("/", () => Results.Redirect("/api-docs"))
             .ExcludeFromDescription();
     } 
     

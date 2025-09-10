@@ -25,13 +25,7 @@ public class UserDto
     // public List<CardEntity> Cards { get; set; } = [];
 }
 
-// User DTO register 
 
-
-// User DTO login
-
-
-// User DTO Update
 
 public record RegisterDto
 {

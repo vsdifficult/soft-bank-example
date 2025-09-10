@@ -19,8 +19,6 @@ public class TransactionEntity : BaseEntity
 
     public Guid ToCardId { get; set; }
 
-    public CardEntity? Card { get; set; }
-
     public TransactionType TrType { get; set; }
     public TransactionStatus TrStatus { get; set; }
     

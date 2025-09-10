@@ -188,11 +188,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GitHub\\soft-bank-example\\Core\\Core.csproj",
+      "projectUniqueName": "d:\\GitHub\\soft-bank-example\\Core\\Core.csproj",
       "projectName": "Core",
-      "projectPath": "D:\\GitHub\\soft-bank-example\\Core\\Core.csproj",
+      "projectPath": "d:\\GitHub\\soft-bank-example\\Core\\Core.csproj",
       "packagesPath": "C:\\Users\\Difficult\\.nuget\\packages\\",
-      "outputPath": "D:\\GitHub\\soft-bank-example\\Core\\obj\\",
+      "outputPath": "d:\\GitHub\\soft-bank-example\\Core\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Difficult\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -8,11 +8,12 @@ public class CardConfiguration : IEntityTypeConfiguration<CardEntity>
     public void Configure(EntityTypeBuilder<CardEntity> builder)
     {
         builder.HasKey(c => c.Id);
-
-        builder.
-        HasOne(c => c.User)
-        .WithMany(u => u.Cards)
-        .HasForeignKey(c => c.UserId);
+        builder.Property(c => c.AccountId);
+        builder.Property(c => c.UserId);
+        builder.Property(c => c.CardNumber);
+        builder.Property(c => c.CardHolderName);
+        builder.Property(c => c.ExpirationDate);
+        builder.Property(c => c.CVV);
     }
 }
 // Bye Vlad =)
