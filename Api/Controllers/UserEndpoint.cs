@@ -28,7 +28,19 @@ public class UserEndpoint : ControllerBase
             return BadRequest(e.Message);
         }
     } 
-    
+    [HttpPost("signip")]
+    public async Task<IActionResult> EndpointSignIpAsync(LoginDto dto)
+    {
+        try
+        {
+            var user = await _authenticationService.SignInAsync(dto);
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    } 
     [HttpPost("verification")]
     public async Task<IActionResult> EndpointVerifyAsync(VerificationDto dto)
     {
